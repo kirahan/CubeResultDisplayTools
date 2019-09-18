@@ -31,7 +31,7 @@ app.use(express.json())
 
 //app 设置为3000端口
 app.listen(3000,() =>{
-    console.log('4000 and 3000 is listening')
+    console.log('3000 is listening')
 })
 
 let m_socket_client = ''
@@ -40,124 +40,61 @@ io.on('connection', client => {
     console.log('there is one socket client connected') 
 
     // ---------------------------------------init---------------------------------------------------------------
-    //visitor_handshake
-    client.on('handshake-visitor',()=>{
-      client.emit('handshake_server_to_visitor',client.id)
+    //stage_handshake
+    client.on('handshake-stage',()=>{
+      client.emit('handshake_server_to_stage',client.id)
     })
 
-    //visitor_heart
-    // 同时不断吧visitor的状态发送给服务器
-    client.on('heartbeat-visitor',(data)=>{
-      if(m_socket_client!= ''){
-        // console.log('manage h in')
-        client.emit('heartbeat_server_to_visitor')
-        m_socket_client.emit('visitor_state_server_to_manager',data)
-      }else{
-        // console.log('manage h out')
-        null
-      }
+    //stage_heart
+    // 同时不断吧stage的状态发送给服务器
+    client.on('heartbeat-stage',(data)=>{
+      io.emit('heartbeat_server_to_stage',data)
     })
-
-    //visitor_auth
-    client.on('auth_request_from_visitor',(data)=>{
-      console.log(data)
-      // console.log(m_socket_client)
-      io.emit('auth_request_to_manager',data)
-    })
-
 
     //manager_handshake
     //同时保存manager的client，方便直接给manager发送信息
     client.on('handshake-manager',()=>{
-      console.log(client.id)
-      m_socket_client = client
       client.emit('handshake_server_to_manager',client.id)
     })
 
     //manager_heart
     client.on('heartbeat-manager',(data)=>{
-      // console.log(data)
-      client.emit('heartbeat_server_to_manager')
+      client.emit('heartbeat_server_to_manager',data)
     })
   
     // --------------------------command--------------------------------------------------------------------------------------
-    //   then manager  send  new emit to all clients side
-    //   管理员发送  允许登陆的指令， ID表示client 的唯一id uuid
-    client.on('v_auth_allowed',id =>{
-      console.log('v_auth_allowed',id)
-      io.emit('auth_allowed_to_v',id)
-    })
-  
-  
-    //   then manager  send new emit to all clients side
-    //   管理员发送  不允许登录的指令， ID表示client 的唯一id uuid
-    client.on('v_auth_refused',id =>{
-      console.log('v_auth_refused',id)
-      io.emit('auth_refused_to_v',id)
-    })
+    //   manager send command to clients side
+    //   管理员发送改变动画模式的指令
+    // paras 
+    // {
+    //      type : 'ad'   'background'  'cubing'  'awarding'    
+    //      model ： 模式1，2，3，3，4，，，6，6、、、、
+    // }
+    //   '广告轮播'  
+    //   '三阶初赛'
+    //   '三阶决赛'
+    //   '二阶初赛'
+    //   '二阶决赛'
+    //   '金字塔初赛'
+    //   '金字塔决赛'
 
-
-    //   then manager  send new emit to all clients side
-    //   管理员发送  不关闭的指令， ID表示client 的唯一id uuid
-    client.on('v_conv_closed',id =>{
-      console.log('v_conv_closed',id)
-      io.emit('conv_closed_to_v',id)
+    client.on('manage_set_model',config=>{
+      console.log('manage_set_model',config)
+      io.emit('set_model_to_stage',config)
     })
   
-    //    send from manager side
-    //   管理员发送  重启server命令
-    client.on('reload',() =>{
-        console.log('reload')
-        // io.emit('reload')
-    })
   
-
 
     // ---------------------------------------message---------------------------------------------------------------
-    //   客户端发送的对话消息，message_v_to_m
-    client.on('message_v_to_m',(data) =>{
-      // console.log('message_v_to_m',data)
-      if(m_socket_client!= ''){
-        m_socket_client.emit('servermessage_v_to_m',data)
-        // console.log(data)
-      }else{
-        io.emit('servermessage_v_to_m',data)
-      }
+    //   manager update result to clients side
+    //   管理员提交选手成绩
+    client.on('manage_update_result',data =>{
+      console.log('manage_update_result',data)
+      io.emit('update_result_to_stage',data)
     })
-
-
-
-    //   管理员发送  重启server命令   message_m_to_v
-    client.on('message_m_to_v',(data) =>{
-      console.log('message_m_to_v',data)
-      io.emit('message_m_to_v',data)
-    })
-
 
     // ---------------------------------------services---------------------------------------------------------------
-    //   顾客发送的服务指令，修理服务，visitor-fix-service
-    client.on('visitor_fix_service',(data) =>{
-      if(m_socket_client!= ''){
-        m_socket_client.emit('needservices_fix_to_manager',data)
-        console.log(data)
-      }else{
-        io.emit('needservices_fix_to_manager',data)
-        console.log(data)
-      }
-    })
-
-    //   顾客发送的服务指令，修理服务，visitor-fix-service
-    client.on('visitor_order_service',(data) =>{
-      if(m_socket_client!= ''){
-        m_socket_client.emit('needservices_order_to_manager',data)
-        console.log(data)
-      }else{
-        io.emit('needservices_order_to_manager',data)
-        console.log(data)
-      }
-    })
-
-
+ 
   
     // 失去连接事件
     client.on('disconnect', (reason) => { 

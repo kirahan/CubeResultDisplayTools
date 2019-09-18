@@ -16,6 +16,42 @@ import Playersresult3 from '../components/Name3'
 export default {
   name: 'home',
   components: { Playersresult3 },
+  sockets: {
+        connect: function () {
+            console.log('stage socket connected')
+            },
+
+        disconnect: function(){
+            console.log('stage socket disconnected')
+        },
+
+        //获取socket的id
+        handshake_server_to_stage : function(stage_socket_id){
+          this.s_socket_id = stage_socket_id
+        },
+
+        //心跳
+        heartbeat_server_to_stage : function(data){
+          // console.log('pang',data)
+        },
+
+        // 设置显示模式
+        set_model_to_stage : function(config){
+          const display_type = config.type
+          const display_model = config.model
+
+          //更新数据
+          // this.$set(this.room_visitor_data,visitor_socket_id,room_v_data)
+          console.log('[set display ways]',config)
+          
+        },
+
+        //更新比赛数据
+        update_result_to_stage: function(data){
+          this.nowShowingData = data
+          console.log('[update players data]',data)
+        },
+    },
   data(){
     return {
         resultdata : [
@@ -62,8 +98,26 @@ export default {
             t2:25.78,
             t3:26.35
           }
-        ]
+        ],
+        s_socket_id: '',
+        nowShowingData : []
     }
-  }
+  },
+  methods : {
+    //第一次握手
+      handshake(){
+          this.$socket.emit('handshake-stage')
+      },
+      //心跳
+      heartbeat(){
+          let heartloop = setInterval(() => {
+          this.$socket.emit('heartbeat-stage')
+          }, 500);
+      },
+  },
+  created(){
+    this.handshake()
+    this.heartbeat()
+  },
 }
 </script>
