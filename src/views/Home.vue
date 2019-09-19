@@ -3,8 +3,7 @@
       <h2>这是展示页面</h2>
       <p>我们要在这里写界面呈现效果</p>
     
-      <Playersresult3  v-for="(data,i) in resultdata" :key="i" :playerdata='data'></Playersresult3>
-     
+      <Playersresult3  v-for="(data,i) in nowShowingData" :key="i" :playerdata='data'></Playersresult3>
       
   </div>
 </template>
@@ -13,9 +12,11 @@
 // @ is an alias to /src
 
 import Playersresult3 from '../components/Name3'
+
+
 export default {
   name: 'home',
-  components: { Playersresult3 },
+  components: { Playersresult3},
   sockets: {
         connect: function () {
             console.log('stage socket connected')
@@ -48,12 +49,13 @@ export default {
 
         //更新比赛数据
         update_result_to_stage: function(data){
-          this.nowShowingData = data
+          this.nowShowingData.push(data)
           console.log('[update players data]',data)
         },
     },
   data(){
     return {
+        test_data : '',
         resultdata : [
           {
             rank : 1,
@@ -97,6 +99,14 @@ export default {
             t1:15.36,
             t2:25.78,
             t3:26.35
+          },
+          {
+            rank : 6,
+            name : 'ycy',
+            result : 56.25,
+            t1: 56.36,
+            t2: 45.87,
+            t3: 23.56,
           }
         ],
         s_socket_id: '',
@@ -121,3 +131,13 @@ export default {
   },
 }
 </script>
+
+
+<style scoped>
+  .myinput{
+    width: 300px;
+    height: 50px;
+    margin-top:50px;
+  }
+
+</style>

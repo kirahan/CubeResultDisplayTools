@@ -1,8 +1,8 @@
 <template>
     <div class="playersresult">
-        <div class="rank">{{playerdata.rank}}</div>
+        <!-- <div class="rank">{{playerdata.rank}}</div> -->
         <div class="name">{{playerdata.name}}</div>
-        <div class="result">{{playerdata.result}}</div>
+        <!-- <div class="result">{{playerdata.result}}</div> -->
         <div class="t1">{{playerdata.t1}}</div>
         <div class="t2">{{playerdata.t2}}</div>
         <div class="t2">{{playerdata.t3}}</div>
