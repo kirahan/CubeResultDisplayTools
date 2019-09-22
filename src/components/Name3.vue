@@ -21,11 +21,14 @@
     </div>
 </template>
 
+
+
 <script>
 export default {
     props : ["playerdata",'title'],
     data(){
         return {
+            text : '你好',
             result_title : {
                     rank : '排名',
                     name: '姓名',
@@ -38,19 +41,33 @@ export default {
     },
     methods : {
         formatresult(result){
-            const data = Number(result.toFixed(0))
-            let min = Math.floor(data/60000)
-            let sec = Math.floor(data%60000/100)
-            let ms = data%100
-            // 12345
-            
-            // console.log(`${min}:${sec}.${ms}`)
-            if(min==0){
-                return `${sec}.${ms}` 
+            if(result == 'DNF'){
+                return "DNF"
             }else{
-                return `${min}:${sec}.${ms}` 
+                const data = Math.floor(result)
+                let min = Math.floor(data/6000)
+                let sec = Math.floor(data%6000/100)
+                let ms = data%100
+                // 12345
+                
+                // console.log(`${min}:${sec}.${ms}`)
+                if(min==0){
+                    return `${sec}.${ms}` 
+                }else{
+                    return `${min}:${sec}.${ms}` 
+                }
             }
+            
+        },
+
+        change(){
+            setTimeout(()=>{
+                this.text = '进口量方法'
+            },2000)
         }
+    },
+    created(){
+        this.change()
     }
 }
 </script>

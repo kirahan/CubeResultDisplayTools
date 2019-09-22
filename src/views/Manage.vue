@@ -41,6 +41,7 @@
                 <button @click="SetModel('2x2')">仅二阶</button>
                 <button @click="SetModel('pyramid')">仅金字塔</button>
                 <button @click="UpdateResult">上传成绩</button>
+                <button @click="DeleteCurrentResult">删除当前成绩</button>
             </div>
 
             <div class="right">
@@ -179,7 +180,7 @@ export default {
         },
 
         // 更新数据
-        UpdateResult(){
+        async UpdateResult(){
             let best_of_3 
             let best_of_5
             let avg_of_5
@@ -252,7 +253,11 @@ export default {
                 }
             }
             console.log('update result',datasend)
-            this.$socket.emit('manage_update_result',datasend)
+            //
+            const sed = await this.$http.post('/results/',datasend)
+            // const res = await this.$http.get('/results/')
+            // console.log(res)
+            this.$socket.emit('manage_update_result','data already sended')
         },
 
         PlayerChooseItem(item,playerinfo){
@@ -285,6 +290,17 @@ export default {
                     }
                 }
                 
+        },
+
+        async DeleteCurrentResult(){
+            const condition = {
+                id : this.player_id,
+                item : this.item_selected,
+                round : this.round_selected
+            }
+            console.log(condition)
+            const res = await this.$http.post('/results/delete',condition)
+            this.$socket.emit('manage_update_result','data already sended')
         },
 
         async refreash(){

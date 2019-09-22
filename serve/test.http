@@ -15,6 +15,7 @@ Content-Type:  application/json
 {
     "no"    : 12,
     "name" : "zhaohan",
+    "age" : "U8",
     "item" : ["3x3","2x2","pyramid"]
 }
 
@@ -31,3 +32,31 @@ Content-Type:  application/json
 
 ###
 DELETE {{uri}}api/players/12
+
+
+
+# ----------------------------------------------------------------------------------------
+@uri = http://localhost:3000/
+###
+GET {{uri}}api/results
+
+
+###
+POST {{uri}}api/results
+Content-Type:  application/json
+
+{
+    "age": "U8",
+    "best": 832,
+    "id": 1,
+    "item": "pyramid",
+    "name": "赵晗",
+    "rank": "-",
+    "result": 15,
+    "round": "final",
+    "t1": 899,
+    "t2": 1835,
+    "t3": 1562,
+    "t4": 832,
+    "t5": 1530
+}

@@ -47,17 +47,25 @@ export default {
     },
     methods :{
         formatresult(result){
-            const data = Number(result.toFixed(0))
-            let min = Math.floor(data/60000)
-            let sec = Math.floor(data%60000/100)
-            let ms = data%100
-            // 12345
-            
-            // console.log(`${min}:${sec}.${ms}`)
-            if(min==0){
-                return `${sec}.${ms}` 
+            if(result == 'DNF'){
+                return "DNF"
             }else{
-                return `${min}:${sec}.${ms}` 
+                const data = Math.floor(result)
+                let min = Math.floor(data/6000)
+                let sec = Math.floor(data%6000/100)
+                let ms = data%100
+                // 12345
+                
+                if(min!=0 && sec<10){
+                    sec = '0' + String(sec)
+                }
+
+                // console.log(`${min}:${sec}.${ms}`)
+                if(min==0){
+                    return `${sec}.${ms}` 
+                }else{
+                    return `${min}:${sec}.${ms}` 
+                }
             }
         }
 

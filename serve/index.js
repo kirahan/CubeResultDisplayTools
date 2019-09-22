@@ -26,7 +26,7 @@ require('./plugins/db')(app)
 
 //挂载app
 // require('./routes/web_manager')(app)
-// require('./routes/translate')(app)
+require('./routes/result')(app)
 require('./routes/player')(app)
 
 //app 设置为3000端口

@@ -74,80 +74,16 @@ export default {
         },
 
         //更新比赛数据
-        update_result_to_stage: function(data){
-          if(data.item == '3x3' && data.round == 'first'){
-                  // console.log(data)
-                  if(data.age == 'U8'){
-                      this.data_3x3_first_u8.push(data)
-                      //排序
-                      this.data_3x3_first_u8.sort((p1,p2)=>{
-                         if(p2=='DNF'){
-                            return -1
-                            }
-                        else{
-                                return p1-p2
-                            }
-                      })
-                      for(let i=0;i<this.data_3x3_first_u8.length;i++){
-                        this.$set(this.data_3x3_first_u8[i],'rank',i+1)
-                      }
-                  }else if(data.age == '8PLUS'){
-                      this.data_3x3_first_8plus.push(data)
-                      //排序
-                      this.data_3x3_first_8plus.sort((p1,p2)=>{
-                          return p1.result-p2.result
-                      })
-                      for(let i=0;i<this.data_3x3_first_8plus.length;i++){
-                        this.$set(this.data_3x3_first_8plus[i],'rank',i+1)
-                      }
-                  }
-                  console.log('[update players data]',this.data_3x3_first_u8,this.data_3x3_first_8plus)
-          }else if(data.item == '3x3' && data.round == 'final'){
-                   if(data.age == 'U8'){
-                      this.data_3x3_final_u8.push(data)
-                      //排序
-                      this.data_3x3_final_u8.sort((p1,p2)=>{
-                         if(p2=='DNF'){
-                            return -1
-                            }
-                        else{
-                                return p1-p2
-                            }
-                      })
-                      for(let i=0;i<this.data_3x3_final_u8.length;i++){
-                        this.$set(this.data_3x3_final_u8[i],'rank',i+1)
-                      }
-                  }else if(data.age == '8PLUS'){
-                      console.log('11')
-                      this.data_3x3_final_8plus.push(data)
-                      //排序
-                      this.data_3x3_final_8plus.sort((p1,p2)=>{
-                          return p1.result-p2.result
-                      })
-                      for(let i=0;i<this.data_3x3_final_8plus.length;i++){
-                        this.$set(this.data_3x3_final_8plus[i],'rank',i+1)
-                      }
-                  }
-                  console.log('[update players data]',this.data_3x3_final_u8,this.data_3x3_final_8plus)
-          }else if(data.item == '2x2'){
-                  this.data_2x2_final.push(data)
-                  this.data_2x2_final.sort((p1,p2)=>{
-                      return p1.result-p2.result
-                  })
-                  for(let i=0;i<this.data_2x2_final.length;i++){
-                        this.$set(this.data_2x2_final[i],'rank',i+1)
-                      }
-                  console.log('[update players data]',this.data_2x2_final)
-          }else if(data.item == 'pyramid'){ 
-                  this.data_pyramid_final.push(data)
-                  this.data_pyramid_final.sort((p1,p2)=>{
-                      return p1.result-p2.result
-                  })
-                  for(let i=0;i<this.data_pyramid_final.length;i++){
-                        this.$set(this.data_pyramid_final[i],'rank',i+1)
-                      }
-                  console.log('[update players data]',this.data_pyramid_final)
-          }
+        update_result_to_stage: function(message){
+          // this.refresh()
+          this.$http.get('/results/').then((res)=>{
+              const datalist = res.data
+              this.initAllResult()
+              for(let i = 0;i<datalist.length;i++){
+                this.get_data_from_serve(datalist[i])
+              }
+            })
+          
         },
     },
   data(){
@@ -165,7 +101,120 @@ export default {
     }
   },
   methods : {
+    initAllResult(){
+      this.data_3x3_first_u8 = []
+      this.data_3x3_first_8plus = []
+      this.data_3x3_final_u8 = []
+      this.data_3x3_final_8plus = []
+      this.data_2x2_final = []
+      this.data_pyramid_final = []
+    }
+    ,
+    async refresh(){
+        const res = await this.$http.get('/results/')
+        const datalist = res.data
+        // console.log(data)
+        for(let i = 0;i<datalist.length;i++){
+          this.get_data_from_serve(datalist[i])
+        }
+    },
+
     //第一次握手
+      get_data_from_serve(data){
+          if(data.item == '3x3' && data.round == 'first'){
+                  // console.log(data)
+                  if(data.age == 'U8'){
+                      this.data_3x3_first_u8.push(data)
+                      this.data_3x3_first_u8.sort((p1,p2)=>{
+                         if(p2.result=='DNF'){
+                            return -1
+                            }
+                        else{
+                                return p1.result-p2.result
+                            }
+                      })
+                      for(let i=0;i<this.data_3x3_first_u8.length;i++){
+                        this.$set(this.data_3x3_first_u8[i],'rank',i+1)
+                      }
+                  }else if(data.age == '8PLUS'){
+                      this.data_3x3_first_8plus.push(data)
+                      //排序
+                      this.data_3x3_first_8plus.sort((p1,p2)=>{
+                          if(p2.result=='DNF'){
+                            return -1
+                            }
+                        else{
+                                return p1.result-p2.result
+                            }
+                      })
+                      for(let i=0;i<this.data_3x3_first_8plus.length;i++){
+                        this.$set(this.data_3x3_first_8plus[i],'rank',i+1)
+                      }
+                  }
+                  console.log('[update players data]',this.data_3x3_first_u8,this.data_3x3_first_8plus)
+          }else if(data.item == '3x3' && data.round == 'final'){
+                   if(data.age == 'U8'){
+                      this.data_3x3_final_u8.push(data)
+                      //排序
+                      this.data_3x3_final_u8.sort((p1,p2)=>{
+                         if(p2.result=='DNF'){
+                            return -1
+                            }
+                        else{
+                                return p1.result-p2.result
+                            }
+                      })
+                      for(let i=0;i<this.data_3x3_final_u8.length;i++){
+                        this.$set(this.data_3x3_final_u8[i],'rank',i+1)
+                      }
+                  }else if(data.age == '8PLUS'){
+                      console.log('11')
+                      this.data_3x3_final_8plus.push(data)
+                      //排序
+                      this.data_3x3_final_8plus.sort((p1,p2)=>{
+                          if(p2.result=='DNF'){
+                            return -1
+                            }
+                        else{
+                                return p1.result-p2.result
+                            }
+                      })
+                      for(let i=0;i<this.data_3x3_final_8plus.length;i++){
+                        this.$set(this.data_3x3_final_8plus[i],'rank',i+1)
+                      }
+                  }
+                  console.log('[update players data]',this.data_3x3_final_u8,this.data_3x3_final_8plus)
+          }else if(data.item == '2x2'){
+                  this.data_2x2_final.push(data)
+                  this.data_2x2_final.sort((p1,p2)=>{
+                      if(p2.result=='DNF'){
+                            return -1
+                            }
+                        else{
+                                return p1.result-p2.result
+                            }
+                  })
+                  for(let i=0;i<this.data_2x2_final.length;i++){
+                        this.$set(this.data_2x2_final[i],'rank',i+1)
+                      }
+                  console.log('[update players data]',this.data_2x2_final)
+          }else if(data.item == 'pyramid'){ 
+                  this.data_pyramid_final.push(data)
+                  this.data_pyramid_final.sort((p1,p2)=>{
+                     if(p2.result=='DNF'){
+                            return -1
+                            }
+                        else{
+                                return p1.result-p2.result
+                            }
+                  })
+                  for(let i=0;i<this.data_pyramid_final.length;i++){
+                        this.$set(this.data_pyramid_final[i],'rank',i+1)
+                      }
+                  console.log('[update players data]',this.data_pyramid_final)
+          }
+      }
+      ,
       handshake(){
           this.$socket.emit('handshake-stage')
       },
@@ -175,8 +224,10 @@ export default {
           this.$socket.emit('heartbeat-stage')
           }, 500);
       },
+  
   },
   created(){
+    this.refresh()
     this.handshake()
     this.heartbeat()
   },
