@@ -21,13 +21,13 @@ app.use(require('cors')())
 //json中间件
 app.use(express.json())
 
-//挂载db
-// require('./plugins/db')(app)
+// 挂载db
+require('./plugins/db')(app)
 
 //挂载app
 // require('./routes/web_manager')(app)
 // require('./routes/translate')(app)
-// require('./routes/chat')(app)
+require('./routes/player')(app)
 
 //app 设置为3000端口
 app.listen(3000,() =>{

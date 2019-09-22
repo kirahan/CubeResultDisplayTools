@@ -4,6 +4,8 @@ import router from './router'
 import store from './store'
 import './plugins/element.js'
 import VueSocketIO from 'vue-socket.io'  
+import http from './http'     //自己封装的http模块，做服务器请求用
+Vue.prototype.$http = http
 
 //websocket
 Vue.use(new VueSocketIO({

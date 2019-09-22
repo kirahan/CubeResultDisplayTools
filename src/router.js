@@ -2,6 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home'
 import Manage from './views/Manage'
+import Addplayer from './views/Addplayer'
+
+
 Vue.use(Router)
 
 export default new Router({
@@ -17,6 +20,11 @@ export default new Router({
       path: '/manage',
       name: 'manage',
       component: Manage
+    },
+    {
+      path: '/add',
+      name: 'add',
+      component: Addplayer
     },
   ]
 })

@@ -1,9 +1,33 @@
 <template>
   <div class="home">
-      <h2>这是展示页面</h2>
-      <p>我们要在这里写界面呈现效果</p>
-    
-      <Playersresult3  v-for="(data,i) in nowShowingData" :key="i" :playerdata='data'></Playersresult3>
+      <h2 class="title">2019武汉少儿魔方赛·成绩板</h2>
+      
+      <div v-if="now_display=='3x3_first'">
+        <div class="result_333">
+            <Playersresult3  :playerdata='data_3x3_first_u8' :title="'三阶初赛·8岁以下'"></Playersresult3>
+        </div>
+        <div class="result_333">
+            <Playersresult3  :playerdata='data_3x3_first_8plus' :title="'三阶初赛·8岁以上(含)'"></Playersresult3>
+        </div>
+      </div>
+
+      <div v-if="now_display=='3x3_final'">
+        <div class="result_333">
+            <Playersresult5  :playerdata='data_3x3_final_u8' :title="'三阶决赛·8岁以下'"></Playersresult5>
+        </div>
+        <div class="result_333">
+            <Playersresult5  :playerdata='data_3x3_final_8plus' :title="'三阶决赛·8岁以上(含)'"></Playersresult5>
+        </div>
+      </div>
+
+      <div v-if="now_display=='2x2'">
+            <Playersresult5  :playerdata='data_2x2_final' :title="'二阶预决赛'"></Playersresult5>
+      </div>
+
+      <div v-if="now_display=='pyramid'">
+            <Playersresult5  :playerdata='data_pyramid_final' :title="'金字塔预决赛'"></Playersresult5>
+      </div>
+
       
   </div>
 </template>
@@ -12,11 +36,11 @@
 // @ is an alias to /src
 
 import Playersresult3 from '../components/Name3'
-
+import Playersresult5 from '../components/Name5'
 
 export default {
   name: 'home',
-  components: { Playersresult3},
+  components: { Playersresult3,Playersresult5},
   sockets: {
         connect: function () {
             console.log('stage socket connected')
@@ -39,7 +63,9 @@ export default {
         // 设置显示模式
         set_model_to_stage : function(config){
           const display_type = config.type
-          const display_model = config.model
+          if(display_type == 'result'){
+            this.now_display = config.model
+          }
 
           //更新数据
           // this.$set(this.room_visitor_data,visitor_socket_id,room_v_data)
@@ -49,68 +75,93 @@ export default {
 
         //更新比赛数据
         update_result_to_stage: function(data){
-          this.nowShowingData.push(data)
-          console.log('[update players data]',data)
+          if(data.item == '3x3' && data.round == 'first'){
+                  // console.log(data)
+                  if(data.age == 'U8'){
+                      this.data_3x3_first_u8.push(data)
+                      //排序
+                      this.data_3x3_first_u8.sort((p1,p2)=>{
+                         if(p2=='DNF'){
+                            return -1
+                            }
+                        else{
+                                return p1-p2
+                            }
+                      })
+                      for(let i=0;i<this.data_3x3_first_u8.length;i++){
+                        this.$set(this.data_3x3_first_u8[i],'rank',i+1)
+                      }
+                  }else if(data.age == '8PLUS'){
+                      this.data_3x3_first_8plus.push(data)
+                      //排序
+                      this.data_3x3_first_8plus.sort((p1,p2)=>{
+                          return p1.result-p2.result
+                      })
+                      for(let i=0;i<this.data_3x3_first_8plus.length;i++){
+                        this.$set(this.data_3x3_first_8plus[i],'rank',i+1)
+                      }
+                  }
+                  console.log('[update players data]',this.data_3x3_first_u8,this.data_3x3_first_8plus)
+          }else if(data.item == '3x3' && data.round == 'final'){
+                   if(data.age == 'U8'){
+                      this.data_3x3_final_u8.push(data)
+                      //排序
+                      this.data_3x3_final_u8.sort((p1,p2)=>{
+                         if(p2=='DNF'){
+                            return -1
+                            }
+                        else{
+                                return p1-p2
+                            }
+                      })
+                      for(let i=0;i<this.data_3x3_final_u8.length;i++){
+                        this.$set(this.data_3x3_final_u8[i],'rank',i+1)
+                      }
+                  }else if(data.age == '8PLUS'){
+                      console.log('11')
+                      this.data_3x3_final_8plus.push(data)
+                      //排序
+                      this.data_3x3_final_8plus.sort((p1,p2)=>{
+                          return p1.result-p2.result
+                      })
+                      for(let i=0;i<this.data_3x3_final_8plus.length;i++){
+                        this.$set(this.data_3x3_final_8plus[i],'rank',i+1)
+                      }
+                  }
+                  console.log('[update players data]',this.data_3x3_final_u8,this.data_3x3_final_8plus)
+          }else if(data.item == '2x2'){
+                  this.data_2x2_final.push(data)
+                  this.data_2x2_final.sort((p1,p2)=>{
+                      return p1.result-p2.result
+                  })
+                  for(let i=0;i<this.data_2x2_final.length;i++){
+                        this.$set(this.data_2x2_final[i],'rank',i+1)
+                      }
+                  console.log('[update players data]',this.data_2x2_final)
+          }else if(data.item == 'pyramid'){ 
+                  this.data_pyramid_final.push(data)
+                  this.data_pyramid_final.sort((p1,p2)=>{
+                      return p1.result-p2.result
+                  })
+                  for(let i=0;i<this.data_pyramid_final.length;i++){
+                        this.$set(this.data_pyramid_final[i],'rank',i+1)
+                      }
+                  console.log('[update players data]',this.data_pyramid_final)
+          }
         },
     },
   data(){
     return {
+        now_display: '3x3_first',
         test_data : '',
-        resultdata : [
-          {
-            rank : 1,
-            name : 'hanzhao',
-            result : 21.35,
-            t1:15.36,
-            t2:25.78,
-            t3:26.35
-          },
-          {
-            rank : 2,
-            name : 'nzhao',
-            result : 25.35,
-            t1:25.36,
-            t2:25.78,
-            t3:36.35
-          }
-          ,
-          {
-            rank : 3,
-            name : 'zhao',
-            result : 32.35,
-            t1:15.36,
-            t2:25.78,
-            t3:26.35
-          }
-          ,
-          {
-            rank : 4,
-            name : 'jo',
-            result : 44.35,
-            t1:15.36,
-            t2:25.78,
-            t3:26.35
-          }
-          ,
-          {
-            rank : 5,
-            name : 'kira',
-            result : 52.35,
-            t1:15.36,
-            t2:25.78,
-            t3:26.35
-          },
-          {
-            rank : 6,
-            name : 'ycy',
-            result : 56.25,
-            t1: 56.36,
-            t2: 45.87,
-            t3: 23.56,
-          }
-        ],
+        data_3x3_first_u8 :[],
+        data_3x3_first_8plus : [],
+        data_3x3_final_u8 : [],
+        data_3x3_final_8plus : [],
+        data_2x2_final : [],
+        data_pyramid_final : [],
         s_socket_id: '',
-        nowShowingData : []
+        // nowShowingData : []
     }
   },
   methods : {
@@ -134,6 +185,11 @@ export default {
 
 
 <style scoped>
+  .result_333{
+    display: inline-block;
+    width: 48%;
+    margin: 10px;
+  }
   .myinput{
     width: 300px;
     height: 50px;

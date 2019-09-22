@@ -1,7 +1,7 @@
 # CubeResultDisplayTools
 
 ## 如何开始
-1. 下载
+1. 下载   git clone git@github.com:kirahan/CubeResultDisplayTools.git
 ```
 下载到本地
 ```

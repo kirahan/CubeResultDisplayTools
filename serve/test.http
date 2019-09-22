@@ -1,0 +1,33 @@
+
+@uri = http://localhost:3000/
+###
+GET {{uri}}api/players
+
+
+###
+GET {{uri}}api/players/3
+
+###
+
+POST {{uri}}api/players
+Content-Type:  application/json
+
+{
+    "no"    : 12,
+    "name" : "zhaohan",
+    "item" : ["3x3","2x2","pyramid"]
+}
+
+###
+PUT {{uri}}api/players
+Content-Type:  application/json
+
+{
+    "no"    : 1,
+    "name" : "zhaohan",
+    "item" : ["3x3"]
+}
+
+
+###
+DELETE {{uri}}api/players/12
