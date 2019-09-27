@@ -19,9 +19,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: npm install, build, and deploy
       run: |
-        npm install
-        npm run build 
-        bash deploy.sh
+        echo $GITHUB_TOKEN
       env:
         CI: true
         GITHUB_TOKEN: ${{ secrets.access_token }}
