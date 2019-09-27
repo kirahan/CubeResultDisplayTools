@@ -28,6 +28,6 @@ jobs:
         git push -f git@github.com:kirahan/CubeResultDisplayTools.git master:gh-pages
       env:
         CI: true
-        GITHUB_TOKEN: ${{ secrets.access_token }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         FIRST_NAME: Kira
         LAST_NAME: Han
