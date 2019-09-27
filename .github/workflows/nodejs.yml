@@ -23,3 +23,6 @@ jobs:
         bash deploy.sh
       env:
         CI: true
+        GITHUB_TOKEN: ${{ secrets.access_token }}
+        FIRST_NAME: Kira
+        LAST_NAME: Han
