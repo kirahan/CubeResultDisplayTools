@@ -21,8 +21,6 @@ jobs:
       run: |
         npm install
         npm run build 
-   - name: deploy
-     run: |
         bash deploy.sh
      env:
         GITHUB_TOKEN: ${{ secrets.access_token }}
