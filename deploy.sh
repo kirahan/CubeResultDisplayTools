@@ -8,6 +8,8 @@ cd dist
 
 # 提交到本地仓库
 git init
+git config user.name "GitHub Actions"
+git config user.email "478222961@qq.com"
 git add -A
 git commit -m "deploy"
 git push -f git@github.com:kirahan/CubeResultDisplayTools.git master:gh-pages
