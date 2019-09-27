@@ -17,13 +17,14 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: npm install, build, and test
+    - name: npm install, build, and deploy
       run: |
         npm install
         npm run build 
         bash deploy.sh
-     env:
+      env:
+        CI: true
         GITHUB_TOKEN: ${{ secrets.access_token }}
         FIRST_NAME: Kira
         LAST_NAME: Han
-        CI: true
+        
