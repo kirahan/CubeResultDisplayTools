@@ -17,6 +17,7 @@ jobs:
         
       env:
         CI: true
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         FIRST_NAME: Kira
         LAST_NAME: Han
         
