@@ -19,7 +19,12 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: npm install, build, and deploy
       run: |
+        //npm install
+        //npm run build --if-present
         echo $GITHUB_TOKEN
+        echo $GITHUB_REPOSITORY
+        git config user.name "GitHub Actions"
+        git config user.email "478222961@qq.com"
       env:
         CI: true
         GITHUB_TOKEN: ${{ secrets.access_token }}
