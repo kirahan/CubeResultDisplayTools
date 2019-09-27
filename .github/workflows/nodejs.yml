@@ -21,6 +21,7 @@ jobs:
       run: |
         npm install
         npm run build --if-present
+      CI: true
    - name: deploy
      run: |
         bash deploy.sh
