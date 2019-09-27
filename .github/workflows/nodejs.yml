@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [8.x, 10.x, 12.x]
+        node-version: [10.x]
 
     steps:
     - uses: actions/checkout@v1
@@ -32,7 +32,7 @@ jobs:
         
       env:
         CI: true
-        GITHUB_TOKEN: ${{ secrets.access_token }}
+        GITHUB_TOKEN: ${{ secrets.page }}
         FIRST_NAME: Kira
         LAST_NAME: Han
         
