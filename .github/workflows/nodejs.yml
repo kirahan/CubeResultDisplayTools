@@ -19,8 +19,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: npm install, build, and deploy
       run: |
-        //npm install
-        //npm run build --if-present
         echo $GITHUB_TOKEN
         echo $GITHUB_REPOSITORY
         git config user.name "GitHub Actions"
