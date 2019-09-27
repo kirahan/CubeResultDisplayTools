@@ -21,13 +21,10 @@ jobs:
       run: |
         npm install
         npm run build --if-present
-        cd dist
-        git init
-        git add -A
-        git commit -m "deploy"
-        git push -f git@github.com:kirahan/CubeResultDisplayTools.git master:gh-pages
-      env:
-        CI: true
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+   - name: deploy
+     run: |
+        bash deploy.sh
+     env:
+        GITHUB_TOKEN: ${{ secrets.access_token }}
         FIRST_NAME: Kira
         LAST_NAME: Han
