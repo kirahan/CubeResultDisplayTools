@@ -11,13 +11,13 @@ jobs:
     steps:
     - name: npm install, build, and deploy
       run: |
-        remote_repo="https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+        remote_repo="https://${page}@github.com/${GITHUB_REPOSITORY}.git"
         echo $remote_repo
         echo "Deploy complete"
         
       env:
         CI: true
-        GITHUB_TOKEN: ${{ secrets.page }}
+        page: ${{ secrets.page }}
         FIRST_NAME: Kira
         LAST_NAME: Han
         
