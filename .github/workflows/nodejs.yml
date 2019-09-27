@@ -11,8 +11,17 @@ jobs:
     steps:
     - name: npm install, build, and deploy
       run: |
+        npm install
+        npm run build --if-present
+        cd dist
+        git init
+        git config user.name "GitHub Actions"
+        git config user.email "478222961@qq.com"
         remote_repo="https://${page}@github.com/${GITHUB_REPOSITORY}.git"
         echo $remote_repo
+        git add .
+        git commit -m "deploy"
+        git push --force "${remote_repo}" master:gh-pages
         echo "Deploy complete"
         
       env:
