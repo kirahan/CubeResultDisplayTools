@@ -42,6 +42,9 @@ GET {{uri}}api/results
 
 
 ###
+DELETE {{uri}}api/results
+
+###
 POST {{uri}}api/results
 Content-Type:  application/json
 
@@ -52,11 +55,21 @@ Content-Type:  application/json
     "item": "pyramid",
     "name": "赵晗",
     "rank": "-",
-    "result": 15,
+    "result": 156,
     "round": "final",
     "t1": 899,
     "t2": 1835,
     "t3": 1562,
     "t4": 832,
     "t5": 1530
+}
+
+###
+POST {{uri}}api/results/delete
+Content-Type:  application/json
+
+{
+    "id": 1,
+    "round": "first",
+    "item" : "3x3"
 }
