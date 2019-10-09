@@ -7,6 +7,10 @@ import VueSocketIO from 'vue-socket.io'
 import http from './http'     //自己封装的http模块，做服务器请求用
 Vue.prototype.$http = http
 
+const myEvent = new Vue()
+
+Vue.prototype.$myevent = myEvent
+
 //websocket
 Vue.use(new VueSocketIO({
   debug: false,

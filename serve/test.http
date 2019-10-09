@@ -73,3 +73,14 @@ Content-Type:  application/json
     "round": "first",
     "item" : "3x3"
 }
+
+
+###
+GET  {{uri}}api/adminusers
+
+###
+GET  {{uri}}api/normalusers
+
+
+###
+GET  {{uri}}api/vericode

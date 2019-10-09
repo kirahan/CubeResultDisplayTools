@@ -4,9 +4,17 @@ module.exports = app => {
         {mergeParams : true}
     )
     const Player = require('../../models/Player')
+    const AdminUser = require('../../models/AdminUser')
+    const jwt = require('jsonwebtoken')
+    const assert = require('http-assert')
+
+
+    // 登录校验中间件
+    const authMiddleware = require('../../middleware/auth')
+
 
     //创建player
-    router.post('/', async (req,res)=>{
+    router.post('/', authMiddleware() ,async (req,res)=>{
         const modelis = await Player.findOne({no : req.body.no}) 
         let model
         if(modelis != null && modelis != {} && modelis != undefined){

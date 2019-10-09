@@ -30,7 +30,7 @@
    2个page 一个是主显示页面，一个是管理页面用来录入成绩
    一个serve服务，用来建立2个page之间的通讯
 
-
+6. express需要升级到5.0 否则不支持 http-assert
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

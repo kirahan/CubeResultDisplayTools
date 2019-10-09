@@ -25,9 +25,16 @@ app.use(express.json())
 require('./plugins/db')(app)
 
 //挂载app
-// require('./routes/web_manager')(app)
+//管理员
+require('./routes/admin')(app)
+// 结果
 require('./routes/result')(app)
+//选手
 require('./routes/player')(app)
+// 普通用户
+require('./routes/normaluser')(app)
+// 短信验证码
+require('./routes/sms')(app)
 
 //app 设置为3000端口
 app.listen(3000,() =>{
@@ -38,6 +45,27 @@ let m_socket_client = ''
 
 io.on('connection', client => {
     console.log('there is one socket client connected') 
+
+    // --------------------------------------------kang------------------------------------------------------------------
+    //stage_handshake
+    // client.on('handshake_kang',(data)=>{
+    //   console.log(data)
+    //   client.emit('handshake_server_to_kang',client.id)
+    //   setTimeout(function () {
+    //     client.emit('stop_timer',client.id)
+    //   },5000)
+    // })
+
+
+    // client.on('timer-kang',(command)=>{
+    //   io.emit('server_command_to_stage',command)
+    // })
+
+
+    // //
+    // client.on('stop_to_server',()=>{
+    //   io.emit('stop_timer','hello')
+    // })
 
     // ---------------------------------------init---------------------------------------------------------------
     //stage_handshake
@@ -108,3 +136,10 @@ io.on('connection', client => {
       }
      });
   });
+
+
+app.use( async (err,req,res,next)=>{
+    res.status(err.statusCode || 500).send({
+        message : err.message
+    })
+})
